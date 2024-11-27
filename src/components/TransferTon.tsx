@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Address, toNano, Comment } from "ton";
+import { Address, toNano, comment } from "ton";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { Card, FlexBoxCol, FlexBoxRow, Button, Input } from "./styled/styled";
 
@@ -49,7 +49,7 @@ export function TransferTon() {
             sender.send({
               to: Address.parse(tonRecipient),
               value: toNano(tonAmount),
-              body: Comment.text(commentText),
+              body: comment(commentText),
             });
           }}
         >
