@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTonConnect } from './useTonConnect';
-import { useAsyncInitialize } from './useAsyncInitialize';
+import { TonClient } from 'ton';
 
 export function useTonBalance() {
   const { sender, connected } = useTonConnect();
@@ -9,13 +9,17 @@ export function useTonBalance() {
   useEffect(() => {
     if (!connected) return;
 
+    const client = new TonClient({ endpoint: 'https://toncenter.com/api/v2/jsonRPC' });
+
     async function getBalance() {
-      const balance = await sender.getBalance();
+      const address = await sender.getSender();
+      if (!address) return;
+      const balance = await client.getBalance(address);
       setBalance(balance);
     }
 
     getBalance();
-    const intervalId = setInterval(getBalance, 5000); // Update every 5 seconds
+    const intervalId = setInterval(getBalance, 5000);
 
     return () => clearInterval(intervalId);
   }, [connected, sender]);
